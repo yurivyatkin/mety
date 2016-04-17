@@ -5,3 +5,4 @@ class @MetDisplay extends React.Component
       React.DOM.h2
         className: 'title'
         'Meteorological Information'
+      React.createElement MetGraph
