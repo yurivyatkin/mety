@@ -9,6 +9,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'haml'
 gem 'bootstrap-sass', '~> 3.3.6'
+gem 'react-rails', '~> 1.6.0'
 group :development do
   gem 'spring'
 end
