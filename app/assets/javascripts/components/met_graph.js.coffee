@@ -1,33 +1,40 @@
 class @MetGraph extends React.Component
-  constructor: (props) ->
-    super: props
-    @state =
-      dataset:
-        [
-          {"datetime": '2014-02-10 05:00:00', "lev": 13.1}
-          {"datetime": '2014-02-10 06:00:00', "lev": 13.0}
-          {"datetime": '2014-02-10 07:00:00', "lev": 13.0}
-          {"datetime": '2014-02-10 08:00:00', "lev": 13.0}
-          {"datetime": '2014-02-10 09:00:00', "lev": 12.9}
-          {"datetime": '2014-02-10 10:00:00', "lev": 12.9}
-          {"datetime": '2014-02-10 11:00:00', "lev": 12.8}
-          {"datetime": '2014-02-10 12:00:00', "lev": 12.8}
-          {"datetime": '2014-02-10 13:00:00', "lev": 12.7}
-          {"datetime": '2014-02-10 14:00:00', "lev": 12.6}
-        ]
-
   render: ->
+    xDomain = d3.extent(@props.dataset.map((d) -> d.datetime ))
+    xRange = [0, width - margin.left - margin.right]
+
+    yDomain = d3.extent(@props.dataset.map((d) -> d.indicator ))
+    yRange = [height - margin.top - margin.bottom, 0]
+
+    xScale = d3.time.scale()
+      .domain xDomain
+      .range xRange
+
+    yScale = d3.scale.linear()
+      .domain yDomain
+      .range yRange
+
     React.DOM.div
       className: 'panel panel-default'
       React.DOM.div
         className: 'panel-body'
-        'Here will be a graph'
+        React.DOM.div
+          className: "svg-container"
           React.DOM.svg
-            width: '250'
-            height: '250'
-            React.DOM.g
-              transform: 'translate(50, 20)'
-              React.DOM.rect
-                width: '100'
-                height: '200'
-                fill: 'blue'
+            id: "graph#{@props.graphId}"
+            viewBox: "0 0 #{width} #{height}"
+            transform: "translate(#{margin.left},#{margin.top})"
+            React.createElement MetAxis,
+              type: "x"
+              scale: xScale
+              numberOfTicks: 4
+            React.createElement MetAxis,
+              type: "y"
+              scale: yScale
+              numberOfTicks: 4
+            React.createElement MetLine,
+              title: "Name this indicator!"
+              dataset: @props.dataset
+              xScale: xScale
+              yScale: yScale
+        React.DOM.p {}, @props.title
